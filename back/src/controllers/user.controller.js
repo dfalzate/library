@@ -10,7 +10,7 @@ module.exports = {
       await User.create(user);
       res.status(200).send('User created!');
     } catch (error) {
-      res.status(400).send(error);
+      res.status(405).send(error.message);
     }
   },
   async login(req, res) {
@@ -32,5 +32,5 @@ module.exports = {
     } catch (error) {
       res.status(400).send(error);
     }
-  }
+  },
 };

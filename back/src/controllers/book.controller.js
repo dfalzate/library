@@ -7,11 +7,11 @@ module.exports = {
       const result = await Book.find()
         .populate({
           path: 'authors',
-          select: 'email -_id'
+          select: 'email -_id',
         })
         .populate({
           path: 'categories',
-          select: 'name -_id'
+          select: 'name -_id',
         });
       res.status(200).send(result);
     } catch (error) {
@@ -24,11 +24,11 @@ module.exports = {
       const result = await Book.findById(id)
         .populate({
           path: 'authors',
-          select: 'email -_id'
+          select: 'email -_id',
         })
         .populate({
           path: 'categories',
-          select: 'name -_id'
+          select: 'name -_id',
         });
       res.status(200).send(result);
     } catch (error) {
@@ -39,13 +39,13 @@ module.exports = {
     try {
       // const token = req.headers.authorization;
       // const { userFinded } = jwt.decode(token, process.env.SECRET);
-      const categoryId = req.params.categoryId;
       let book = req.body;
-      book = {
-        ...book,
-        categories: book.categories.concat(categoryId)
-        // authors: book.authors.concat(userFinded._id)
-      };
+      console.log('Server', book);
+      if (!book.categories) {
+        book = { ...book, categories: [] };
+      }
+      book = { ...book, categories: book.categories.concat(book.category) };
+      console.log('Server', book);
       const result = await Book.create(book);
       res.status(200).send(result);
     } catch (error) {
@@ -58,7 +58,7 @@ module.exports = {
       const body = req.body;
       const result = await Book.findByIdAndUpdate(bookId, body, {
         useFindAndModify: false,
-        new: true
+        new: true,
       });
       res.status(200).send(result);
     } catch (error) {
@@ -73,5 +73,5 @@ module.exports = {
     } catch (error) {
       res.status(400).send(error);
     }
-  }
+  },
 };

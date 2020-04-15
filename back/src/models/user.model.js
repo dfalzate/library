@@ -4,7 +4,17 @@ const userSchema = new mongoose.Schema(
   {
     email: {
       type: String,
-      required: true
+      required: true,
+      validate: [
+        {
+          validator: value => {
+            return mongoose.models.User.findOne({ email: value }).then(user => {
+              return !user;
+            });
+          },
+          message: 'El usuario ya existe'
+        }
+      ]
     },
     password: {
       type: String,
